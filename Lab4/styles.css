@@ -1,0 +1,58 @@
+/* Conectar CSS - Fondo del body */
+body {
+  background-color: lightgray;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Selectores básicos */
+h1, h2 {
+  color: blue;
+}
+
+p {
+  color: gray;
+  font-size: 16px;
+}
+
+/* Clases e IDs */
+.subtitulo {
+  font-style: italic;
+  color: green;
+}
+
+#intro {
+  background-color: lightyellow;
+  padding: 15px;
+}
+
+/* Modelo de caja */
+.tarjeta {
+  border: 2px solid gray;
+  padding: 20px;
+  margin: 20px 0;
+  background-color: white;
+}
+
+/* Botón interactivo */
+button {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: darkblue;
+}
+
+/* Pie de página */
+footer {
+  text-align: center;
+  background-color: black;
+  color: white;
+  padding: 10px;
+}
