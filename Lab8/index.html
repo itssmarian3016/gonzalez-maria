@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Registro de Estudiantes</title>
+
+  <!-- Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #0f1a2a;
+      --panel-2: #0d1723;
+      --card: #0b1621;
+      --muted: #9aa3b0;
+      --text: #e6eef6;
+      --accent: #4fd26b;
+      --input-bg: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.04);
+      --shadow: rgba(0,0,0,0.6);
+      --danger: #f45b69;
+    }
+
+    *{box-sizing:border-box;font-family:'Montserrat',sans-serif}
+    html,body{height:100%;margin:0;background: radial-gradient(1200px 800px at 10% 10%, rgba(255,255,255,0.01), transparent), linear-gradient(180deg,#08101a 0%, #07101a 100%), var(--bg); color:var(--text); -webkit-font-smoothing:antialiased;}
+
+    .container{max-width:1180px;margin:40px auto;padding:30px;}
+
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:24px;
+    }
+    h1{font-size:44px;margin:0;display:flex;gap:12px;align-items:center}
+    h1 .emoji{font-size:46px; transform: translateY(2px);}
+
+    .badge{
+      background: linear-gradient(180deg,#13481f,#0e3b18);
+      color:#bff1c6;padding:8px 16px;border-radius:20px;font-weight:600;box-shadow:0 3px 8px rgba(8,40,16,0.6);
+    }
+
+    /* Form card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.007));
+      border:1px solid var(--border); padding:22px;border-radius:14px; box-shadow: 0 6px 20px var(--shadow);
+    }
+
+    .form-title{font-weight:700;font-size:20px;margin-bottom:14px}
+
+    .grid{
+      display:grid;gap:16px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .row{
+      display:flex;gap:14px;align-items:center;
+    }
+
+    label{display:block;font-size:14px;color:var(--muted);margin-bottom:8px}
+    input[type="text"], input[type="email"], input[type="number"], select{
+      width:100%; padding:12px 14px;border-radius:10px;background:var(--input-bg);border:1px solid rgba(255,255,255,0.03); color:var(--text); outline:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.01);
+    }
+    input:focus, select:focus{ border-color: rgba(79,210,107,0.35); box-shadow: 0 0 0 4px rgba(79,210,107,0.06); }
+
+    .full{grid-column:1/-1}
+    .half{width:100%}
+
+    .controls{display:flex;gap:12px;align-items:center;margin-top:8px}
+    .btn{
+      padding:10px 18px;border-radius:10px;border:1px solid rgba(255,255,255,0.03); background:transparent;color:var(--text);cursor:pointer;font-weight:600;
+    }
+    .btn.ghost{background:transparent}
+    .btn.primary{
+      background:linear-gradient(180deg,var(--accent),#3bb857); color:#05220a; border:none;box-shadow: 0 6px 18px rgba(7,85,29,0.18);
+    }
+    .btn.warn{background:transparent;border:1px solid rgba(255,255,255,0.04);}
+    .btn.danger{background:linear-gradient(180deg,#ff7b87,#f34757); color:white;border:none}
+
+    .hint{color:var(--muted); margin-left:8px;font-weight:500}
+
+    /* Table area */
+    .spacer{height:26px}
+    .small-btn{padding:8px 12px;border-radius:8px;font-weight:600}
+    .table-card{margin-top:18px;padding:18px;border-radius:14px;border:1px solid var(--border); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.007));}
+    table{width:100%;border-collapse:collapse}
+    thead th{ text-align:left;padding:18px;background:rgba(255,255,255,0.02); border-radius:8px; font-weight:700; color:var(--muted)}
+    tbody td{padding:22px;background:linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.01)); border-top:1px solid rgba(255,255,255,0.02)}
+    .no-results{padding:36px 22px;text-align:center;color:var(--muted);font-weight:600}
+
+    .actions{display:flex;gap:8px;justify-content:flex-end}
+    .count-row{display:flex;justify-content:flex-end;margin-bottom:12px;color:var(--muted)}
+
+    .search-row{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+    .search-row input{max-width:360px}
+
+    @media (max-width:860px){
+      .grid{grid-template-columns:1fr}
+      h1{font-size:32px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span class="emoji">📚</span>Registro de Estudiantes</h1>
+      <div class="badge" id="student-count">0 estudiantes</div>
+    </header>
+
+    <!-- Form -->
+    <section class="card" aria-labelledby="form-title">
+      <div id="form-title" class="form-title">Nuevo estudiante</div>
+
+      <form id="student-form" novalidate>
+        <div class="grid">
+          <div>
+            <label for="nombre">Nombre <span aria-hidden="true">*</span></label>
+            <input id="nombre" name="nombre" type="text" placeholder="Ana Sofía" required />
+          </div>
+
+          <div>
+            <label for="apellido">Apellido <span aria-hidden="true">*</span></label>
+            <input id="apellido" name="apellido" type="text" placeholder="González" required />
+          </div>
+
+          <div class="full">
+            <label for="email">Email <span aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" placeholder="ana@example.com" required />
+          </div>
+
+          <div>
+            <label for="edad">Edad</label>
+            <input id="edad" name="edad" type="number" placeholder="18" min="18" max="100" />
+          </div>
+
+          <div>
+            <label for="carrera">Carrera</label>
+            <select id="carrera" name="carrera">
+              <option value="">— Selecciona —</option>
+              <option>Desarrollo y Gestión de Software</option>
+              <option>Ingeniería de Sistemas</option>
+              <option>Electrónica</option>
+              <option>Matemáticas</option>
+              <option>Otra</option>
+            </select>
+          </div>
+
+          <div class="full controls">
+            <button class="btn primary" id="add-btn" type="submit">Agregar estudiante</button>
+            <button class="btn" id="clear-btn" type="button">Limpiar</button>
+            <div class="hint">Los campos marcados con * son obligatorios.</div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <div class="spacer"></div>
+
+    <button class="btn small-btn warn" id="delete-all">Borrar todo</button>
+
+    <!-- Students table -->
+    <section class="table-card" aria-labelledby="table-title">
+      <div id="table-title" style="font-weight:700;font-size:18px;margin-bottom:12px">Estudiantes</div>
+
+      <div class="search-row">
+        <input id="search" placeholder="Buscar por nombre, apellido o email..." />
+        <div style="flex:1"></div>
+        <div class="count-row" id="table-info"></div>
+      </div>
+
+      <div style="overflow:auto;border-radius:10px;padding:8px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.002));">
+        <table role="table" aria-label="Lista de estudiantes">
+          <thead>
+            <tr>
+              <th style="width:48px">#</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Email</th>
+              <th>Edad</th>
+              <th>Carrera</th>
+              <th style="width:220px">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="students-body">
+            <tr class="no-results"><td colspan="7" class="no-results">No hay resultados.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="color:var(--muted);margin-top:14px">Consejo: usa el buscador para filtrar rápidamente los registros.</p>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
